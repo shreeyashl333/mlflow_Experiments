@@ -56,6 +56,20 @@ if __name__ == "__main__":
     alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
     l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
  
+    ## for remote server only (DAGShub)
+    import dagshub
+
+    # Authenticate once using your personal token
+    dagshub.auth.add_app_token(token="828cad78b6c38f0a394180af4a4c690d525e5f77")
+
+    # Initialize repo and enable MLflow integration
+    dagshub.init(
+        repo_owner="shreeyashl333",
+        repo_name="mlflow_Experiments",
+        mlflow=True
+    )
+
+
     with mlflow.start_run():
         lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
         lr.fit(train_x, train_y)
@@ -80,8 +94,8 @@ if __name__ == "__main__":
  
         ## For Remote server only(DAGShub)
  
-        #remote_server_uri="https://dagshub.com/krishnaik06/mlflowexperiments.mlflow"
-        #mlflow.set_tracking_uri(remote_server_uri)
+        remote_server_uri="https://dagshub.com/shreeyashl333/mlflow_Experiments.mlflow"
+        mlflow.set_tracking_uri(remote_server_uri)
  
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
  
